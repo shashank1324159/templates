@@ -1,0 +1,16 @@
+template<class T> struct SEG {
+   const T ID = 1e18; T comb(T a, T b) {return min(a, b);}
+   int n; vector<T> seg;
+   void init(int _n) {n = _n; seg.assign(2*n, ID);}
+   void pull(int p) {seg[p] = comb(seg[2*p], seg[2*p + 1]);}
+   void upd(int p, T val) {
+      for(seg[p += n] = val; p; p /= 2) seg[p/2] = comb(seg[p], seg[p^1]); }
+   T query(int l, int r) {
+      T qval = ID; 
+      for(l += n, r += n; l < r; l /= 2, r /= 2) {
+         if(l&1) qval = comb(qval, seg[l++]); 
+         if(r&1) qval = comb(qval, seg[--r]);
+      } 
+      return qval;
+   }
+};
