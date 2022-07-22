@@ -1,0 +1,10 @@
+template<class T> struct FT {
+   int n; vector<T> fenw;
+   void init(int _n) {n = _n + 1; fenw.assign(n, 0);}
+   void upd(int p, T val) {for(; p <= n; p += p&(-p)) fenw[p] += val;}
+   T query(int p) {
+      T sum = 0;
+      for(; p; p -= p&(-p)) sum += fenw[p];
+      return sum;
+   }
+};
