@@ -1,0 +1,21 @@
+template<class C, bool directed> struct Dijkstra {
+    vector<C> dist; int sz;
+    vector<vector<pair<int, C>>> adj;
+    void init(int _sz) {sz = _sz; adj.clear(); adj.resize(sz);}
+    void ae(int u, int v, C cost) {
+        adj[u].push_back({v, cost});
+        if(!directed) adj[v].push_back({u, cost});
+    }
+    void gen(int st) {
+        dist.assign(sz, numeric_limits<C>::max());
+        using T = pair<C, int>;
+        priority_queue<T, vector<T>, greater<T>> pq;
+        auto check = [&](int a, C b) {
+            if(b < dist[a]) pq.push({dist[a] = b, a});
+        }; check(st, 0);
+        while(!pq.empty()) {
+            T x = pq.top(); pq.pop(); if(dist[x.s] < x.f) continue;
+            for(auto y : adj[x.s]) check(y.f, x.f + y.s);
+        }
+    }
+};
